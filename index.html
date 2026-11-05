@@ -1,1 +1,374 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Letter For You 💙</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: linear-gradient(135deg, #dceeff, #a9c9e8, #eaf4ff);
+    font-family: Georgia, serif;
+}
+
+/* Background hearts */
+.heart {
+    position: absolute;
+    color: #547da8;
+    opacity: 0.5;
+    animation: float 5s infinite ease-in-out;
+    pointer-events: none;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-25px); }
+}
+
+/* Main container */
+.container {
+    position: relative;
+    width: 340px;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Envelope */
+.envelope {
+    position: absolute;
+    width: 320px;
+    height: 205px;
+    background: #5c83ae;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 15px 30px rgba(30, 66, 105, 0.25);
+    transition: transform 0.5s;
+    z-index: 3;
+}
+
+.envelope:hover {
+    transform: translateY(-5px);
+}
+
+/* Envelope front */
+.envelope-front {
+    position: absolute;
+    inset: 0;
+    background: #7298c0;
+    clip-path: polygon(0 0, 50% 57%, 100% 0, 100% 100%, 0 100%);
+    z-index: 3;
+}
+
+/* Envelope side folds */
+.envelope::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: #86a9cc;
+    clip-path: polygon(0 0, 50% 55%, 0 100%);
+    z-index: 2;
+}
+
+.envelope::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: #6389b4;
+    clip-path: polygon(100% 0, 50% 55%, 100% 100%);
+    z-index: 2;
+}
+
+/* Envelope flap */
+.flap {
+    position: absolute;
+    width: 100%;
+    height: 110px;
+    top: 0;
+    background: #91b3d6;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top;
+    transition: transform 1s ease;
+    z-index: 5;
+}
+
+/* Letter inside envelope */
+.letter {
+    position: absolute;
+    width: 285px;
+    height: 180px;
+    top: 10px;
+    left: 17px;
+    padding: 25px;
+    background: #f7edda;
+    text-align: center;
+    color: #526b88;
+    transition: all 1.3s ease;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.letter h2 {
+    font-size: 20px;
+    margin-top: 25px;
+}
+
+.letter p {
+    font-size: 12px;
+    margin-top: 12px;
+}
+
+/* Click instruction */
+.instruction {
+    position: absolute;
+    top: 285px;
+    width: 100%;
+    text-align: center;
+    color: #3d638b;
+    font-size: 15px;
+    letter-spacing: 1px;
+    transition: opacity 0.5s;
+}
+
+/* Open envelope animation */
+.container.open .flap {
+    transform: rotateX(180deg);
+    z-index: 0;
+}
+
+.container.open .letter {
+    top: -100px;
+    z-index: 4;
+}
+
+/* Full letter */
+.letter-full {
+    position: fixed;
+    width: min(85vw, 540px);
+    height: min(85vh, 780px);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -40%) scale(0.3);
+    opacity: 0;
+    visibility: hidden;
+    z-index: 10;
+    padding: 55px 40px;
+    overflow-y: auto;
+    background:
+        radial-gradient(ellipse at center, #fff9eb 0%, #f4e8d1 100%);
+    color: #665b50;
+    box-shadow: 0 15px 50px rgba(28, 52, 79, 0.3);
+    clip-path: polygon(
+        2% 1%, 15% 2%, 28% 1%, 42% 2%, 58% 1%,
+        75% 2%, 98% 1%, 97% 15%, 99% 30%,
+        97% 48%, 99% 65%, 97% 82%, 99% 98%,
+        82% 97%, 65% 99%, 48% 97%, 30% 99%,
+        15% 97%, 2% 99%, 3% 80%, 1% 65%,
+        3% 45%, 1% 25%
+    );
+    transition: all 1s ease;
+}
+
+.letter-full.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.letter-full h1 {
+    text-align: center;
+    color: #52769b;
+    font-size: 27px;
+    margin-bottom: 25px;
+    font-style: italic;
+}
+
+.letter-full .letter-content {
+    font-size: 16px;
+    line-height: 1.9;
+    white-space: pre-wrap;
+    font-style: italic;
+}
+
+.signature {
+    text-align: right;
+    margin-top: 35px;
+    color: #52769b;
+    font-style: italic;
+    font-size: 18px;
+}
+
+/* Decorations */
+.decoration {
+    position: absolute;
+    color: #668db5;
+    font-size: 25px;
+    pointer-events: none;
+}
+
+.decoration.one {
+    top: 20px;
+    left: 25px;
+}
+
+.decoration.two {
+    top: 55px;
+    right: 25px;
+}
+
+.decoration.three {
+    bottom: 25px;
+    right: 30px;
+}
+
+.decoration.four {
+    bottom: 30px;
+    left: 25px;
+}
+
+/* Close button */
+.close-btn {
+    display: block;
+    margin: 30px auto 0;
+    padding: 10px 25px;
+    background: #7298c0;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: Georgia, serif;
+}
+
+.close-btn:hover {
+    background: #456d98;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .letter-full {
+        width: 90vw;
+        height: 82vh;
+        padding: 45px 27px;
+    }
+
+    .letter-full h1 {
+        font-size: 23px;
+    }
+
+    .letter-full .letter-content {
+        font-size: 14px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Floating hearts -->
+<span class="heart" style="top:12%;left:15%;font-size:25px;">♥</span>
+<span class="heart" style="top:25%;right:15%;font-size:20px;">♥</span>
+<span class="heart" style="bottom:20%;left:12%;font-size:28px;">♥</span>
+<span class="heart" style="bottom:12%;right:18%;font-size:23px;">♥</span>
+<span class="heart" style="top:65%;left:8%;font-size:18px;">♥</span>
+
+<div class="container" id="container">
+
+    <div class="letter">
+        <h2>for my baby ♡</h2>
+        <p>a little reminder of how loved you are</p>
+    </div>
+
+    <div class="envelope" id="envelope" onclick="openLetter()">
+        <div class="flap"></div>
+        <div class="envelope-front"></div>
+    </div>
+
+    <div class="instruction" id="instruction">
+        ♡ click the envelope to open ♡
+    </div>
+
+</div>
+
+<!-- Full letter -->
+<div class="letter-full" id="fullLetter">
+
+    <span class="decoration one">♥</span>
+    <span class="decoration two">♥</span>
+    <span class="decoration three">♥</span>
+    <span class="decoration four">♥</span>
+
+    <h1>to my lander ♡</h1>
+
+    <div class="letter-content" id="letterContent">
+belated happy monthsary, lander! this is just a small gift from me. i was waiting for my sl that came from jace (my birthday gift) before giving you yours, which came from my own pocket. i just wanted us to be matchy-matchy, you know? hehez.
+
+i hope this small gift makes you happy, even if it's kalea and not helcurt. i know how much you want helcurt's zodiac skin, and i can't give it to you just yet because i'm still a student, just like you. hehe bawi ako kapag may work na
+
+i just want you to know that this gift is also my way of expressing how grateful i am to have you and how much i appreciate you for being with me. when i'm with you, i get to experience what it's like to be completely myself, whether we're playing in-game or talking on call. you never get mad when we lose a game, kahit baog ako at kahit makulit ako sa call. even when i ask you the stupidest questions, you never get mad at me. thank you for having so much patience with me and for always being gentle with me, although minsan nagrereklamo ako na ang sungit-sungit mong sumagot sa akin. HAHAHAHAHA.
+
+i love you so much, to the point that no words can ever express or explain how much i feel for you. thank you, because this is the first time i've experienced this kind of love, where my heart is always at ease. it's always calm and peaceful, where i don't have to constantly worry about anything. thank you so much for giving me the peace of mind i've been looking for all this time.
+
+i hope you know how proud i am to have you and how thankful i am for everything. i love you big time, baby!
+    </div>
+
+    <div class="signature">
+        yours truly, naomi
+    </div>
+
+    <button class="close-btn" onclick="closeLetter()">
+        Close Letter
+    </button>
+
+</div>
+
+<script>
+let isOpening = false;
+
+function openLetter() {
+    if (isOpening) return;
+    isOpening = true;
+
+    const container = document.getElementById("container");
+    const instruction = document.getElementById("instruction");
+    const fullLetter = document.getElementById("fullLetter");
+
+    container.classList.add("open");
+    instruction.style.opacity = "0";
+
+    // Show the complete letter after the envelope opens
+    setTimeout(() => {
+        fullLetter.classList.add("show");
+    }, 1400);
+}
+
+function closeLetter() {
+    const container = document.getElementById("container");
+    const instruction = document.getElementById("instruction");
+    const fullLetter = document.getElementById("fullLetter");
+
+    fullLetter.classList.remove("show");
+
+    setTimeout(() => {
+        container.classList.remove("open");
+        instruction.style.opacity = "1";
+        isOpening = false;
+    }, 800);
+}
+</script>
+
+</body>
+</html>
+
